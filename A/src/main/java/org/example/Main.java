@@ -1,5 +1,7 @@
 package org.example;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.*;
 import java.lang.Character;
 
@@ -31,10 +33,10 @@ public class Main {
     }
 
 
-    static String infixToRpn(String expression) {
+    static ArrayList<String> infixToRpn(String expression) {
         fillMap(operations);
         Stack<String> stack = new Stack<>();
-        String output = "";
+        ArrayList<String> output = new ArrayList<>();
         for (int i = 0; i < expression.length(); ++i) {
             String c = String.valueOf(expression.charAt(i));
             if (c.equals("-") && expression.charAt(i + 1) == '>') {
@@ -45,28 +47,26 @@ public class Main {
                 stack.push(c);
             } else if (expression.charAt(i) == ')') {
                 while (!stack.isEmpty() && !stack.peek().equals("("))
-                    output += stack.pop();
+                    output.add(stack.pop());
                 stack.pop();
             } else if (!isOperation(expression.charAt(i), operations) && !c.equals("->")) {
                 if (i == expression.length() - 1) {
-                    output += c;
-                    output += " ";
+                    output.add(c);
                     break;
                 }
                 while (!isOperation(expression.charAt(i), operations) && expression.charAt(i + 1) != ('-') && !isOperation(expression.charAt(i + 1), operations) && expression.charAt(i + 1) != ')') {
                     c += String.valueOf(expression.charAt(i + 1));
                     i++;
                 }
-                output += c;
-                output += " ";
+                output.add(c);
             } else {
                 if (c.equals("->")) {
                     while (!stack.isEmpty() && getPrecedence(c) < getPrecedence(stack.peek())) {
-                        output += stack.pop();
+                        output.add(stack.pop());
                     }
                 } else {
                     while (!stack.isEmpty() && getPrecedence(c) <= getPrecedence(stack.peek())) {
-                        output += stack.pop();
+                        output.add(stack.pop());
                     }
                 }
                 stack.push(c);
@@ -74,39 +74,29 @@ public class Main {
         }
         while (!stack.isEmpty()) {
             if (stack.peek().equals("("))
-                return "This expression is invalid";
-            output += stack.pop();
+                return null;
+            output.add(stack.pop());
         }
         return output;
 
     }
 
-    static String superFunc(String expression) {
+    static String superFunc(ArrayList<String> expression) {
         Stack<String> stack = new Stack<>();
-        for (int i = 0; i < expression.length(); ++i) {
+        for (String string : expression) {
             String to_stack = "";
-            String element = String.valueOf(expression.charAt(i));
-            if (element.equals("-")) {
-                element += String.valueOf(expression.charAt(i + 1));
-                i++;
-            }
-
-            if (isOperation(expression.charAt(i), operations) || element.equals("->")) {
-                if (element.equals("!")) {
-                    to_stack += "(" + element + "," + stack.pop() + ")";
+            if (string.equals("!") || string.equals("&") || string.equals("|") || string.equals("->")) {
+                if (string.equals("!")) {
+                    to_stack += "(" + string + "," + stack.pop() + ")";
                     stack.push(to_stack);
                 } else {
                     String first_pop = stack.pop();
                     String second_pop = stack.pop();
-                    to_stack += "(" + element + "," + second_pop + "," + first_pop + ")";
+                    to_stack += "(" + string + "," + second_pop + "," + first_pop + ")";
                     stack.push(to_stack);
                 }
             } else {
-                while (expression.charAt(i) != ' ') {
-                    i++;
-                    element += expression.charAt(i);
-                }
-                stack.push(element.trim());
+                stack.push(string.trim());
             }
         }
         return stack.pop();
@@ -151,10 +141,9 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String expression = scanner.nextLine();
-//        String expression = "P1’->!QQ->!R10&S|!T&U&V";
-//        System.out.println(expression);
-        //System.out.println(infixToRpn(expression));
-        System.out.println(cleaning(superFunc(infixToRpn(expression))));
-
+        //String expression = "P1’->!QQ->!R10&S|!T&U&V";
+        ArrayList<String> ss = infixToRpn(expression);
+        assert ss != null;
+        System.out.println(cleaning(superFunc(ss)));
     }
 }
