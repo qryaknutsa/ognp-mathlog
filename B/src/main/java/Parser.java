@@ -101,39 +101,4 @@ public class Parser {
         return output;
     }
 
-
-    static String cleaning(String expression) {
-        ArrayList<String> to_replace = new ArrayList<>();
-        for (int i = 0; i < expression.length(); i++) {
-            if (expression.charAt(i) == '(' && expression.charAt(i + 1) == '!') {
-                String susp = String.valueOf(expression.charAt(i));
-                while (expression.charAt(i) != ')') {
-                    i++;
-                    susp += String.valueOf(expression.charAt(i));
-                }
-                int count_commas = 0;
-                for (int j = 0; j < susp.length(); j++) {
-                    if (susp.charAt(j) == ',') {
-                        count_commas++;
-                    }
-                }
-                if (count_commas == 1) to_replace.add(susp);
-            }
-        }
-
-        for (String s : to_replace) {
-            String element = "";
-            for (int k = 0; k < s.length(); k++) {
-                if (s.charAt(k) == ',') {
-                    k++;
-                    while (s.charAt(k) != ')') {
-                        element += String.valueOf(s.charAt(k));
-                        k++;
-                    }
-                }
-            }
-            expression = expression.replaceFirst(s, "!" + element);
-        }
-        return expression;
-    }
 }

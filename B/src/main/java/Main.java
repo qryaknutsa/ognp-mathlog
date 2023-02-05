@@ -84,15 +84,16 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        Scanner scanner = new Scanner(System.in);
-//        String expression = scanner.nextLine();
+        Scanner scanner = new Scanner(System.in);
+        String expression = scanner.nextLine();
         //!A&!B->!(A|B)
         //A->!B123
         //P1’->!QQ->!R10&S|!T&U&V
-        String expression = "((PPP->PPP’)->PPP)->PPP";
+        //((PPP->PPP’)->PPP)->PPP
         ArrayList<String> ss = Parser.infixToRpn(expression);
-
-        System.out.println(analyze(ss));
+        assert ss != null;
+        String new_ss = analyze(ss);
+        System.out.println(new_ss);
 //        assert ss != null;
 //        System.out.println(Parser.cleaning(Parser.superFunc(ss)));
     }

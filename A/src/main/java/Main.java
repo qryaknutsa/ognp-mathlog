@@ -214,6 +214,7 @@ public class Main {
         //P1’->!QQ->!R10&S|!T&U&V
         ArrayList<String> ss = infixToRpn(expression);
         assert ss != null;
-        System.out.println(cleaning(superFunc(ss)));
+//        System.out.println(cleaning(superFunc(ss)));
+        System.out.println(ss);
     }
 }
