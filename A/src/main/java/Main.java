@@ -46,8 +46,8 @@ public class Main {
             }
 
 
-            System.out.println("______________________\n" + c);
-            System.out.println(i);
+//            System.out.println("______________________\n" + c);
+//            System.out.println(i);
 
 
             if (expression.charAt(i) == '(') {
@@ -105,23 +105,22 @@ public class Main {
 ////                }
 
 
-                System.out.println("BREAK??");
                 while (!isOperation(expression.charAt(i), operations) && i < expression.length() - 2) {
                     if (expression.charAt(i + 1) == ('-') || expression.charAt(i + 2) == ('>') || isOperation(expression.charAt(i + 1), operations) || expression.charAt(i + 1) == ')') {
-                        System.out.println("At break:" + c);
+//                        System.out.println("At break:" + c);
                         break;
                     }
-                    System.out.println("C before: " + c);
+//                    System.out.println("C before: " + c);
                     c += String.valueOf(expression.charAt(i + 1));
                     i++;
-                    System.out.println("C after: " + c);
+//                    System.out.println("C after: " + c);
                 }
                 //наверное делать проверку только на скобку странно, поэтому думаем. Или не глупо
                 if (i == expression.length() - 2 && expression.charAt(i + 1) != (')')) {
                     i++;
-                    System.out.println("Last C before: " + c);
+//                    System.out.println("Last C before: " + c);
                     c += String.valueOf(expression.charAt(i));
-                    System.out.println("Last C after: " + c);
+//                    System.out.println("Last C after: " + c);
                 }
 
                 output.add(c);
@@ -140,12 +139,12 @@ public class Main {
         }
         while (!stack.isEmpty()) {
             if (stack.peek().equals("(")) {
-                System.out.println("Oops, it's null");
+//                System.out.println("Oops, it's null");
                 return null;
             }
             output.add(stack.pop());
         }
-        System.out.println("output:" + output);
+//        System.out.println("output:" + output);
         return output;
     }
 
@@ -214,7 +213,7 @@ public class Main {
         //P1’->!QQ->!R10&S|!T&U&V
         ArrayList<String> ss = infixToRpn(expression);
         assert ss != null;
-//        System.out.println(cleaning(superFunc(ss)));
-        System.out.println(ss);
+        System.out.println(cleaning(superFunc(ss)));
+
     }
 }
