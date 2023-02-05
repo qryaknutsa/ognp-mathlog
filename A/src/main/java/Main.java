@@ -1,5 +1,3 @@
-package org.example;
-
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.*;
@@ -39,25 +37,93 @@ public class Main {
         ArrayList<String> output = new ArrayList<>();
         for (int i = 0; i < expression.length(); ++i) {
             String c = String.valueOf(expression.charAt(i));
+            if (expression.charAt(i) == '\n') {
+                continue;
+            }
             if (c.equals("-") && expression.charAt(i + 1) == '>') {
                 c += String.valueOf(expression.charAt(i + 1));
                 i++;
             }
+
+
+            System.out.println("______________________\n" + c);
+            System.out.println(i);
+
+
             if (expression.charAt(i) == '(') {
                 stack.push(c);
             } else if (expression.charAt(i) == ')') {
-                while (!stack.isEmpty() && !stack.peek().equals("("))
+                while (!stack.isEmpty() && !stack.peek().equals("(")) {
                     output.add(stack.pop());
+                }
                 stack.pop();
             } else if (!isOperation(expression.charAt(i), operations) && !c.equals("->")) {
-                if (i == expression.length() - 1) {
-                    output.add(c);
-                    break;
-                }
-                while (!isOperation(expression.charAt(i), operations) && expression.charAt(i + 1) != ('-') && !isOperation(expression.charAt(i + 1), operations) && expression.charAt(i + 1) != ')') {
+                //Случай, если название переменной больше одного чара
+
+
+//                while (!isOperation(expression.charAt(i), operations)) {
+//
+//                    if (i < expression.length() - 2) {
+//                        if (expression.charAt(i + 1) == ('-')
+//                                || expression.charAt(i + 2) == ('>')
+//                                || isOperation(expression.charAt(i + 1), operations)
+//                                || expression.charAt(i + 1) == ')') {
+//                            output.add(c);
+//                            break;
+//                        }
+//                    }
+//                    c += String.valueOf(expression.charAt(i + 1));
+//                    i++;
+//                }
+////                if (i == expression.length() - 1) {
+////                    c += String.valueOf(expression.charAt(i));
+////                    output.add(c);
+////                    break;
+////                }
+//                output.add(c);
+
+
+//                while (!isOperation(expression.charAt(i), operations) && i < expression.length() - 2) {
+//                    if (expression.charAt(i + 1) == ('-')
+//                            || expression.charAt(i + 2) == ('>')
+//                            || isOperation(expression.charAt(i + 1), operations)
+//                            || expression.charAt(i + 1) == ')') {
+//                        break;
+//                    }
+//                    System.out.println("C before: " + c);
+//                    c += String.valueOf(expression.charAt(i + 1));
+//                    i++;
+//                    System.out.println("C after: " + c);
+//                }
+//                output.add(c);
+////                if (i == expression.length() - 1) {
+////                    c += String.valueOf(expression.charAt(i));
+////                    output.add(c);
+////                    break;
+////                } else {
+////                    output.add(c);
+////                }
+
+
+                System.out.println("BREAK??");
+                while (!isOperation(expression.charAt(i), operations) && i < expression.length() - 2) {
+                    if (expression.charAt(i + 1) == ('-') || expression.charAt(i + 2) == ('>') || isOperation(expression.charAt(i + 1), operations) || expression.charAt(i + 1) == ')') {
+                        System.out.println("At break:" + c);
+                        break;
+                    }
+                    System.out.println("C before: " + c);
                     c += String.valueOf(expression.charAt(i + 1));
                     i++;
+                    System.out.println("C after: " + c);
                 }
+                //наверное делать проверку только на скобку странно, поэтому думаем. Или не глупо
+                if (i == expression.length() - 2 && expression.charAt(i + 1) != (')')) {
+                    i++;
+                    System.out.println("Last C before: " + c);
+                    c += String.valueOf(expression.charAt(i));
+                    System.out.println("Last C after: " + c);
+                }
+
                 output.add(c);
             } else {
                 if (c.equals("->")) {
@@ -73,12 +139,14 @@ public class Main {
             }
         }
         while (!stack.isEmpty()) {
-            if (stack.peek().equals("("))
+            if (stack.peek().equals("(")) {
+                System.out.println("Oops, it's null");
                 return null;
+            }
             output.add(stack.pop());
         }
+        System.out.println("output:" + output);
         return output;
-
     }
 
     static String superFunc(ArrayList<String> expression) {
@@ -141,7 +209,9 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String expression = scanner.nextLine();
-        //String expression = "P1’->!QQ->!R10&S|!T&U&V";
+        //!A&!B->!(A|B)
+        //A->!B123
+        //P1’->!QQ->!R10&S|!T&U&V
         ArrayList<String> ss = infixToRpn(expression);
         assert ss != null;
         System.out.println(cleaning(superFunc(ss)));
